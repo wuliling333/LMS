@@ -113,24 +113,24 @@ def getSummary():
 # 实现添加图书函数(addBook)
 def addBook(sid,name,price,summary):
     for b in books:
-        if b.sid == sid:
+        if b["sid"] == sid:
             print("此ID的书已存在")
             return "添加失败"
     else:
-        b={'id':sid,'name':name,'price':price,'summary':summary}
+        b={'sid':sid,'name':name,'price':price,'summary':summary}
         books.append(b)
         print(b)
         return addBook
 # 实现通过编号修改图书信息函数(modifyBookByID)
 def modifyBookByID(sid):
     for b in books:
-        if b.sid == sid:
+        if b["sid"] == sid:
             name = getName()
             price = getPrice()
             summary = getSummary()
-            b.name =name
-            b.price = price
-            b.summary = summary
+            b["name"] =name
+            b["price"] = price
+            b["summary"] = summary
             print("更改成功")
             return "更改成功"
     else:
@@ -140,8 +140,8 @@ def modifyBookByID(sid):
 # 实现通过图书ID删除图书函数（deleteBookByID）
 def deleteBookByID(sid):
     for b in books:
-        if b.sid == sid:
-            books.remove(b.sid)
+        if b["sid"] == sid:
+            books.remove(b)
             print("删除成功")
             return "删除成功"
     else:
@@ -168,7 +168,7 @@ def deleteBookByName(name):
 def queryBookByID(sid):
 
     for b in books:
-        if b.sid == sid:
+        if b["sid"] == sid:
             print(f"查询成功，书的书{sid}")
             return "查询成功"
         else:
@@ -178,7 +178,7 @@ def queryBookByID(sid):
 def queryBookByName(name):
     exit_name=[]
     for b in books:
-        if b.name == name:
+        if b["name"] == name:
             exit_name.append(b)
         if len(exit_name)>0:
             print(f"查询成功，书的书名{name},图书一共{len(exit_name)}本")
@@ -206,8 +206,6 @@ def queryBookByName(name):
 def showAllInfo():
     for b in books:
         print(b)
-
-
 
 def bookManager():
     while True:
