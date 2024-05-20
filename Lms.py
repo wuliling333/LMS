@@ -4,75 +4,7 @@
 # @file: Lms.py
 # @time: 2024/5/20 14:22
 # @desc:
-# 功能拆解
-# 图书信息包含：
-#
-# 编号（sid), 书名（name), 价格（price), 简介（summary) 四个信息
-# 每个图书信息使用字典形式保存
-# 使用列表保存所有图书的信息
-# 实现菜单函数(menu)，输出下列信息，返回用户输入的编号
-#
-# print("*****************************")
-# print("*      图书管理系统           *")
-# print("* 1. 添加新图书信息           *")
-# print("* 2. 通过图书ID修改图书信息      *")
-# print("* 3. 通过图书ID删除图书信息      *")
-# print("* 4. 通过书名删除图书信息      *")
-# print("* 5. 通过图书ID查询图书信息      *")
-# print("* 6. 通过书名查询图书信息      *")
-# print("* 7. 显示所有图书信息         *")
-# print("* 8. 退出系统                *")
-# print("*****************************")
-# 定义管理函数 (bookManager)，用来实现整体业务逻辑。
-#
-# 对用户输入内容进行输入校验
-# 根据用户输入内容选择不同功能执行
-# 因程序中需要多次对编号及书名进行输入，故抽取函数获取对应的数据。
-#
-# 获取编号函数（getID）, 输入编号并返回（字符串类型）eg. s01
-# 获取书名函数（getName）, 输入书名并返回（字符串类型）
-# 获取书名函数（getPrice）, 输入价格并返回（整型）
-# 获取书名函数（getSummary）, 输入简介并返回（字符串类型）
-# 实现添加图书函数(addBook)
-#
-# 函数参数为编号，书名，价格，简介四个参数
-# 返回是否添加成功的结果
-# 要求编号不可重复。
-# 实现通过编号修改图书信息函数(modifyBookByID)
-#
-# 参数为图书ID
-# 如果图书存在，则进行修改，不存在输出提示
-# 返回是否修改成功
-# 实现通过图书ID删除图书函数（deleteBookByID）
-#
-# 参数为图书ID
-# 如果图书存在，则进行删除，不存在输出提示，并返回是否删除成功
-# 实现通过书名删除图书函数(deleteBookByName)
-#
-# 参数为书名
-# 如果图书存在，则进行删除（同名图书全部删除），不存在输出提示
-# 返回是否删除成功
-# 实现通过图书ID查询图书函数(queryBookByID)
-#
-# 参数为图书ID
-# 如果图书存在，则输出图书信息，不存在输出提示
-# 返回是否查询成功
-# 实现通过书名查询图书函数(queryBookByName)
-#
-# 参数为书名
-# 如果图书存在，则输出图书信息（同名图书全部输出），不存在输出提示
-# 返回是否删除成功
-# 实现显示所有图书信息函数(showAllInfo)
-#
-# 输出所有图书信息
-# 实现数据存储函数（save_data)
-#
-# 在退出系统时，将数据保存到 db.txt 文件中
-# 数据保存格式自定义
-# 实现数据加载函数（load_data)
-#
-# 如果数据文件 db.txt 存在，则从文件中加载数据
-# 如果文件不存在则初始为空
+import os
 
 # 菜单函数
 def memu():
@@ -135,7 +67,7 @@ def modifyBookByID(sid):
             return "更改成功"
     else:
 
-        print(f"此ID{sid}的图书不存在")
+        print(f"此ID:{sid}的图书不存在")
         return "更改失败"
 # 实现通过图书ID删除图书函数（deleteBookByID）
 def deleteBookByID(sid):
@@ -146,14 +78,14 @@ def deleteBookByID(sid):
             return "删除成功"
     else:
 
-        print(f"此ID{id}的图书不存在")
+        print(f"此ID:{id}的图书不存在")
         return "更改失败"
 
 # 通过图书书名 删除所有符合的图书
 def deleteBookByName(name):
     exit_name=[]
     for b in books:
-        if b.name == name:
+        if b["name"] == name:
             exit_name.append(b)
 
         if len(exit_name)>0:
@@ -180,27 +112,45 @@ def queryBookByName(name):
     for b in books:
         if b["name"] == name:
             exit_name.append(b)
-        if len(exit_name)>0:
-            print(f"查询成功，书的书名{name},图书一共{len(exit_name)}本")
-            for i in exit_name:
-                print(i)
-            return "查询成功"
+            if len(exit_name)>0:
+                print(f"查询成功，书的书名{name},图书一共{len(exit_name)}本")
+                for i in exit_name:
+                    print(i)
+                return "查询成功"
         else:
             print("查询失败")
 
 
-
-
 # 实现数据存储函数（save_data)
-# def save_data():
-#     b=addBook()
+def save_data():
 #     # 打开文件以写入模式
-#     with open("data.txt", "w") as file:
-#         file.write(b)
-#
-#     print("数据已成功写入到 data.txt 文件中。")
+     with open("data.txt", "w") as file:
+         for item in books:
+             bookStr=""
+             print(item)
+             for v in item.values():
+                 bookStr=bookStr + str(v) + "-"
+
+             file.write(bookStr[:-1]+'\n')
+
+     print("数据已成功写入到 data.txt 文件中。")
 
 # 实现数据加载函数（load_data)
+def load_data():
+    if os.path.exists("data.txt"):
+        with open("data.txt","r") as file:
+            data=file.read()
+            data=data.split("\n")
+            data.remove("")
+            for i in data:
+                book={}
+                print(i)
+                i=i.split("-")
+                book["sid"]=i[0]
+                book["name"] = i[1]
+                book["price"] = i[2]
+                book["summary"] = i[3]
+                books.append(book)
 
 
 def showAllInfo():
@@ -234,10 +184,9 @@ def bookManager():
                 queryBookByName(name)
             elif select_op == "7":
                 showAllInfo()
-            # else:
-            #     save_data()
-            #     break
-
+            else:
+                save_data()
+                break
 
         else:
             print("请输入正确的序号")
