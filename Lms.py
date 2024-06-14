@@ -6,6 +6,7 @@
 # @desc:
 import os
 
+
 # 菜单函数
 def memu():
     print("*****************************")
@@ -22,37 +23,49 @@ def memu():
     select_op = input("输入编号选择操作：")
     return select_op
 
+
 # 定义一个全局变量
 books = []
+
+
 # 编号（sid), 书名（name), 价格（price), 简介（summary) 四个信息
 def getID():
-    sid =input("请输入编号：")
+    sid = input("请输入编号：")
     return sid
+
+
 def getName():
     name = input("请输入书名：")
     return name
+
+
 def getPrice():
     while True:
         price = input("请输入价格：")
-        if len(price)>0 and price.isdigit():
-           return int(price)
+        if len(price) > 0 and price.isdigit():
+            return int(price)
         else:
             print("输入的价格不合法")
+
+
 def getSummary():
     summary = input("请输入简介：")
     return summary
 
+
 # 实现添加图书函数(addBook)
-def addBook(sid,name,price,summary):
+def addBook(sid, name, price, summary):
     for b in books:
         if b["sid"] == sid:
             print("此ID的书已存在")
             return "添加失败"
     else:
-        b={'sid':sid,'name':name,'price':price,'summary':summary}
+        b = {'sid': sid, 'name': name, 'price': price, 'summary': summary}
         books.append(b)
         print(b)
-        return addBook
+
+
+
 # 实现通过编号修改图书信息函数(modifyBookByID)
 def modifyBookByID(sid):
     for b in books:
@@ -60,7 +73,7 @@ def modifyBookByID(sid):
             name = getName()
             price = getPrice()
             summary = getSummary()
-            b["name"] =name
+            b["name"] = name
             b["price"] = price
             b["summary"] = summary
             print("更改成功")
@@ -69,6 +82,8 @@ def modifyBookByID(sid):
 
         print(f"此ID:{sid}的图书不存在")
         return "更改失败"
+
+
 # 实现通过图书ID删除图书函数（deleteBookByID）
 def deleteBookByID(sid):
     for b in books:
@@ -81,14 +96,15 @@ def deleteBookByID(sid):
         print(f"此ID:{id}的图书不存在")
         return "更改失败"
 
+
 # 通过图书书名 删除所有符合的图书
 def deleteBookByName(name):
-    exit_name=[]
+    exit_name = []
     for b in books:
         if b["name"] == name:
             exit_name.append(b)
 
-        if len(exit_name)>0:
+        if len(exit_name) > 0:
             for i in exit_name:
                 books.remove(i)
                 print(i)
@@ -96,9 +112,10 @@ def deleteBookByName(name):
             return "删除成功"
         else:
             print("查询失败")
+
+
 # 实现通过ID函数(queryBookByID)
 def queryBookByID(sid):
-
     for b in books:
         if b["sid"] == sid:
             print(f"查询成功，书的书{sid}")
@@ -106,13 +123,14 @@ def queryBookByID(sid):
         else:
             print("查询失败")
 
+
 # 实现通过书名查询图书函数(queryBookByName)
 def queryBookByName(name):
-    exit_name=[]
+    exit_name = []
     for b in books:
         if b["name"] == name:
             exit_name.append(b)
-            if len(exit_name)>0:
+            if len(exit_name) > 0:
                 print(f"查询成功，书的书名{name},图书一共{len(exit_name)}本")
                 for i in exit_name:
                     print(i)
@@ -123,30 +141,31 @@ def queryBookByName(name):
 
 # 实现数据存储函数（save_data)
 def save_data():
-#     # 打开文件以写入模式
-     with open("data.txt", "w") as file:
-         for item in books:
-             bookStr=""
-             print(item)
-             for v in item.values():
-                 bookStr=bookStr + str(v) + "-"
+    #     # 打开文件以写入模式
+    with open("data.txt", "w") as file:
+        for item in books:
+            bookStr = ""
+            print(item)
+            for v in item.values():
+                bookStr = bookStr + str(v) + "---"
 
-             file.write(bookStr[:-1]+'\n')
+            file.write(bookStr[:-1] + '\n')
 
-     print("数据已成功写入到 data.txt 文件中。")
+    print("数据已成功写入到 data.txt 文件中。")
+
 
 # 实现数据加载函数（load_data)
 def load_data():
     if os.path.exists("data.txt"):
-        with open("data.txt","r") as file:
-            data=file.read()
-            data=data.split("\n")
+        with open("data.txt", "r") as file:
+            data = file.read()
+            data = data.split("\n")
             data.remove("")
             for i in data:
-                book={}
+                book = {}
                 print(i)
-                i=i.split("-")
-                book["sid"]=i[0]
+                i = i.split("-")
+                book["sid"] = i[0]
                 book["name"] = i[1]
                 book["price"] = i[2]
                 book["summary"] = i[3]
@@ -157,10 +176,11 @@ def showAllInfo():
     for b in books:
         print(b)
 
+
 def bookManager():
     while True:
-        select_op=memu()
-        if len(select_op)>0 and select_op in "12345678":
+        select_op = memu()
+        if len(select_op) > 0 and select_op in "12345678":
             if select_op == "1":
                 sid = getID()
                 name = getName()
